@@ -1,0 +1,25 @@
+{
+    "name": "gruberro/netatmo-viewer",
+    "description": "A simple viewer for the major Netatmo stats displayable by a simple output device supporting HTML.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Gruber",
+            "email": "robert@mir-zwoa.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "repositories":[
+        {
+            "type": "vcs",
+            "url": "https://github.com/gruberro/Netatmo-API-PHP"
+        }
+    ],
+    "require": {
+        "silex/silex": "~2.0",
+        "netatmo/netatmo-api": "^2.0",
+        "twig/twig": "^1.31",
+        "lokhman/silex-tools": "^2.4"
+    }
+}

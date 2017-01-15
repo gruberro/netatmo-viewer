@@ -1,0 +1,25 @@
+<tr>
+    <td>{{ name }}</td>
+    <td>
+        <img src="assets/temperature.png" />
+        {{ temperature|number_format(1, ',', '.') }}<span class="unit">°C</span>
+        <span class="temperature-trend">
+            {% if temperature_trend == 'stable' %}
+                {{ '→' }}
+            {% elseif temperature_trend == 'up' %}
+                {{ '↗' }}
+            {% elseif temperature_trend == 'down' %}
+                {{ '↘' }}
+            {% endif %}
+        </span>
+    </td>
+    <td>
+        <img src="assets/humidity.png" />
+        {{ humidity }}<span class="unit">%</span>
+    </td>
+    <td class="battery">
+        {% if battery %}
+            <span class="{{ battery > 20 ? 'green' : 'red' }}" style="width: {{ battery }}%"></span>
+        {% endif %}
+    </td>
+</tr>

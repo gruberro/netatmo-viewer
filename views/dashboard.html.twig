@@ -1,0 +1,84 @@
+<html>
+    <title>Netatmo dashboard</title>
+    <head>
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+            * {
+                font-family: 'Open Sans', sans-serif;
+                font-size: 55px;
+            }
+
+            html,
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            table {
+                height: 100vh;
+                width: 100%;
+            }
+
+            tr {
+                vertical-align: middle;
+
+            }
+
+            tr td:first-child,
+            tr td:nth-child(2) {
+                font-weight: bold;
+            }
+
+            tr:nth-child(odd) {
+                background-color: lightgrey;
+            }
+
+            td {
+                padding: 10px;
+            }
+
+            td img {
+                height: 0.6rem;
+                opacity: 0.3;
+            }
+
+            .battery span {
+                display: block;
+                height: 15px;
+                opacity: 0.5;
+            }
+
+            .battery span.green {
+                background-color: limegreen;
+            }
+
+            .battery span.red {
+                background-color: orangered;
+            }
+
+            .temperature-trend {
+                color: darkgrey;
+                font-size: 0.6rem;
+            }
+
+            .unit {
+                font-size: 0.7rem;
+                color: #333;
+            }
+        </style>
+
+        <meta http-equiv="refresh" content="60">
+    </head>
+    <body>
+        <table cellpadding="0" cellspacing="0">
+            {% for device in data.devices %}
+                {% include 'entry.html.twig' with { name: device.module_name, temperature: device.dashboard_data.Temperature, temperature_trend: device.dashboard_data.temp_trend, humidity: device.dashboard_data.Humidity } only %}
+
+                {% for module in device.modules %}
+                    {% include 'entry.html.twig' with { name: module.module_name, temperature: module.dashboard_data.Temperature, temperature_trend: module.dashboard_data.temp_trend, humidity: module.dashboard_data.Humidity, battery: module.battery_percent } only %}
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </body>
+</html>
