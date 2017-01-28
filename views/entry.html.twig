@@ -1,4 +1,15 @@
 <tr>
+    <td>
+        {% if co2 %}
+            {% if co2 < 1000 %}
+                <span class="co2 ok" title="{{ co2 }}"></span>
+            {% elseif co2 < 2000 %}
+                <span class="co2 warning" title="{{ co2 }}"></span>
+            {% else %}
+                <span class="co2 danger" title="{{ co2 }}"></span>
+            {% endif %}
+        {% endif %}
+    </td>
     <td>{{ name }}</td>
     <td>
         <img src="assets/temperature.png" />
