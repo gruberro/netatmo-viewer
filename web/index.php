@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Lokhman\Silex\Provider as ToolsProviders;
+use Symfony\Component\HttpFoundation\Request;
 
 $app = new Silex\Application();
 
@@ -28,6 +29,18 @@ $app->get('/', function() use($app) {
 
     return $app['twig']->render('dashboard.html.twig', array(
         'data' => $client->getData(),
+    ));
+});
+
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    if ($app['debug']) {
+        return;
+    }
+
+    return $app['twig']->render('error.html.twig', array(
+        'exception' => $e,
+        'request' => $request,
+        'code' => $code,
     ));
 });
 
