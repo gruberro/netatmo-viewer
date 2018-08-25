@@ -29,6 +29,7 @@ $app->get('/', function() use($app) {
 
     return $app['twig']->render('dashboard.html.twig', array(
         'data' => $client->getData(),
+        'stationName' => $app['stationName'],
     ));
 });
 
