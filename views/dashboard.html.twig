@@ -2,11 +2,11 @@
     <title>Netatmo dashboard</title>
     <head>
         <style type="text/css">
-            @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+            @import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption');
 
             * {
-                font-family: 'Open Sans', sans-serif;
-                font-size: 55px;
+                font-family: 'PT Sans Caption', sans-serif;
+                font-size: 50px;
             }
 
             html,
@@ -22,11 +22,11 @@
 
             tr {
                 vertical-align: middle;
-
             }
 
             tr td:first-child {
-                width: 1rem;
+                width: 1.5rem;
+                text-align: center;
             }
 
             tr td:nth-child(2),
@@ -34,8 +34,54 @@
                 font-weight: bold;
             }
 
-            tr:nth-child(odd) {
-                background-color: lightgrey;
+            tr td:last-child {
+                min-width: 20px;
+            }
+
+            tr:nth-child(1) {
+                background-color: rgba(251, 251, 242, 0.5);
+                box-shadow: #FBFBF2 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(2) {
+                background-color: rgba(229, 230, 228, 0.5);
+                box-shadow: #E5E6E4 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(3) {
+                background-color: rgba(207, 210, 205, 0.5);
+                box-shadow: #CFD2CD 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(4) {
+                background-color: rgba(166, 162, 162, 0.5);
+                box-shadow: #A6A2A2 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(5) {
+                background-color: rgba(132, 117, 119, 0.5);
+                box-shadow: #847577 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(6) {
+                background-color: rgba(10, 9, 8, 0.5);
+                box-shadow: #0A0908 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(7) {
+                background-color: rgba(34, 51, 59, 0.5);
+                box-shadow: #22333B 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+            tr:nth-child(8) {
+                background-color: rgba(242, 244, 243, 0.5);
+                box-shadow: #F2F4F3 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
+            }
+
+
+            tr:nth-child(9) {
+                background-color: rgba(94, 80, 63, 0.5);
+                box-shadow: #5E503F 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
             }
 
             td {
@@ -48,9 +94,13 @@
             }
 
             .battery span {
-                display: block;
+                display: flex;
                 height: 15px;
-                opacity: 0.5;
+                opacity: 0.8;
+                font-size: 10px;
+                line-height: 10px;
+                align-items: center;
+                padding-left: 2px;
             }
 
             .battery span.green {
@@ -76,20 +126,41 @@
                 width: 1.2rem;
                 height: 1.2rem;
                 border-radius: 50%;
-                -webkit-filter: blur(10px);
-                filter: blur(10px);
+                -webkit-filter: blur(3px);
+                filter: blur(3px);
             }
 
             .co2.ok {
                 background-color: limegreen;
+                box-shadow: 0 0 8px 8px limegreen;
             }
 
             .co2.warning {
                 background-color: yellow;
+                box-shadow: 0 0 8px 8px yellow;
             }
 
             .co2.danger {
                 background-color: orangered;
+                box-shadow: 0 0 8px 8px orangered;
+                animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
+            }
+
+            .offline {
+                text-decoration: line-through;
+                color: #666;
+            }
+
+            @keyframes pulse-dot {
+                0% {
+                    transform: scale(.9);
+                }
+                50% {
+                    transform: scale(1);
+                }
+                100% {
+                    transform: scale(.9);
+                }
             }
         </style>
 
@@ -101,7 +172,7 @@
                 {% include 'entry.html.twig' with { name: device.module_name, temperature: device.dashboard_data.Temperature, temperature_trend: device.dashboard_data.temp_trend, humidity: device.dashboard_data.Humidity, co2: device.dashboard_data.CO2 } only %}
 
                 {% for module in device.modules %}
-                    {% include 'entry.html.twig' with { name: module.module_name, temperature: module.dashboard_data.Temperature, temperature_trend: module.dashboard_data.temp_trend, humidity: module.dashboard_data.Humidity, battery: module.battery_percent, co2: module.dashboard_data.CO2 } only %}
+                    {% include 'entry.html.twig' with { name: module.module_name, temperature: module.dashboard_data.Temperature, temperature_trend: module.dashboard_data.temp_trend, humidity: module.dashboard_data.Humidity, battery: module.battery_percent, co2: module.dashboard_data.CO2, lastSeen: module.last_seen } only %}
                 {% endfor %}
             {% endfor %}
         </table>
