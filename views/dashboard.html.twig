@@ -3,25 +3,51 @@
     <head>
         <style type="text/css">
             @import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption');
+            @import url('https://fonts.googleapis.com/css?family=Exo:200&display=swap');
+
+            :root {
+                --color-red: #ef5350;
+                --color-red-dark: #e53935;
+                --color-yellow: #ffa726;
+                --color-yellow-dark: #fb8c00;
+                --color-green: #66bb6a;
+                --color-green-dark: #43a047;
+                --color-grey-light: #f4f6f8;
+                --color-grey-dark: #546e7a;
+                --color-white: #ffffff;
+            }
 
             * {
                 font-family: 'PT Sans Caption', sans-serif;
-                font-size: 50px;
+                font-size: 10vh;
+                box-sizing: border-box;
             }
 
             html,
             body {
-                padding: 0;
+                padding: 10px;
                 margin: 0;
+                background-color: var(--color-grey-light);
             }
 
             table {
-                height: 100vh;
+                max-height: calc(100vh - 20px);
+                height: 100%;
                 width: 100%;
+                display: table;
+                border-spacing: 0;
+                border-collapse: collapse;
+                box-shadow: 0 0 0 3px rgba(63, 63, 68, .05), 0 1px 3px 0 rgba(63, 63, 68, .15);
+                border-radius: 4px;
+                background-color: var(--color-white);
             }
 
             tr {
                 vertical-align: middle;
+            }
+
+            tr:hover {
+                background-color: rgba(0, 0, 0, .07);
             }
 
             tr td:first-child {
@@ -34,58 +60,13 @@
                 font-weight: bold;
             }
 
-            tr td:last-child {
-                min-width: 20px;
-            }
-
-            tr:nth-child(1) {
-                background-color: rgba(251, 251, 242, 0.5);
-                box-shadow: #FBFBF2 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(2) {
-                background-color: rgba(229, 230, 228, 0.5);
-                box-shadow: #E5E6E4 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(3) {
-                background-color: rgba(207, 210, 205, 0.5);
-                box-shadow: #CFD2CD 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(4) {
-                background-color: rgba(166, 162, 162, 0.5);
-                box-shadow: #A6A2A2 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(5) {
-                background-color: rgba(132, 117, 119, 0.5);
-                box-shadow: #847577 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(6) {
-                background-color: rgba(10, 9, 8, 0.5);
-                box-shadow: #0A0908 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(7) {
-                background-color: rgba(34, 51, 59, 0.5);
-                box-shadow: #22333B 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-            tr:nth-child(8) {
-                background-color: rgba(242, 244, 243, 0.5);
-                box-shadow: #F2F4F3 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
-
-            tr:nth-child(9) {
-                background-color: rgba(94, 80, 63, 0.5);
-                box-shadow: #5E503F 0px 0px 3px 0px, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset, rgb(255, 255, 255) 0px 0px inset
-            }
-
             td {
                 padding: 10px;
+                border-bottom: 3px solid var(--color-grey-light);
+            }
+
+            tr:last-child td {
+                border-bottom: 0;
             }
 
             td img {
@@ -93,32 +74,66 @@
                 opacity: 0.3;
             }
 
+            .battery,
             .battery span {
                 display: flex;
-                height: 15px;
+                width: 15px;
+                font-size: 12px;
+                line-height: 12px;
+                align-items: flex-end;
+            }
+
+            .battery {
+                background-color: var(--color-grey-light);
+                position: relative;
+                height: 100%;
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(63, 63, 68, .4);
+            }
+
+            .battery .percentage {
+                font-family: 'Exo', sans-serif;
+                font-weight: 100;
+                letter-spacing: 2;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                opacity: 1;
+                transform: rotate(-90deg);
+            }
+
+            .battery span {
+                padding-left: 5px;
                 opacity: 0.8;
-                font-size: 10px;
-                line-height: 10px;
-                align-items: center;
-                padding-left: 2px;
             }
 
             .battery span.green {
-                background-color: limegreen;
+                background: linear-gradient(60deg, var(--color-green), var(--color-green-dark));
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(76, 175, 80, .4);
             }
 
             .battery span.red {
-                background-color: orangered;
+                background: linear-gradient(60deg, var(--color-red), var(--color-red-dark));
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
             }
 
             .temperature-trend {
-                color: darkgrey;
-                font-size: 0.6rem;
+                color: var(--color-grey-dark);
+                font-size: .8rem;
+                font-weight: 100;
+            }
+
+            .temperature-trend.up {
+                color: var(--color-green);
+            }
+
+            .temperature-trend.down {
+                color: var(--color-red);
             }
 
             .unit {
-                font-size: 0.7rem;
-                color: #333;
+                font-size: .5rem;
+                color: var(--color-grey-dark);
+                font-weight: 100;
             }
 
             .co2 {
@@ -126,23 +141,21 @@
                 width: 1.2rem;
                 height: 1.2rem;
                 border-radius: 50%;
-                -webkit-filter: blur(3px);
-                filter: blur(3px);
             }
 
             .co2.ok {
-                background-color: limegreen;
-                box-shadow: 0 0 8px 8px limegreen;
+                background: linear-gradient(60deg, var(--color-green), var(--color-green-dark));
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(76, 175, 80, .4);
             }
 
             .co2.warning {
-                background-color: yellow;
-                box-shadow: 0 0 8px 8px yellow;
+                background: linear-gradient(60deg, var(--color-yellow), var(--color-yellow-dark));
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(255, 152, 0, .4);
             }
 
             .co2.danger {
-                background-color: orangered;
-                box-shadow: 0 0 8px 8px orangered;
+                background: linear-gradient(60deg, var(--color-red), var(--color-red-dark));
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
                 animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
             }
 
@@ -164,7 +177,7 @@
             }
         </style>
 
-        <meta http-equiv="refresh" content="600">
+        <meta http-equiv="refresh" content="120">
     </head>
     <body>
         <table cellpadding="0" cellspacing="0">

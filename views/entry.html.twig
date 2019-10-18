@@ -18,33 +18,38 @@
         </span>
     </td>
     <td>
-        <img src="assets/temperature.png" />
         {% if offline %}
             -
         {% else %}
             {{ temperature|number_format(1, ',', '.') }}<span class="unit">°C</span>
-            <span class="temperature-trend">
-                {% if temperature_trend == 'stable' %}
+            {% if temperature_trend == 'stable' %}
+                <span class="temperature-trend stable">
                     {{ '→' }}
-                {% elseif temperature_trend == 'up' %}
+                </span>
+            {% elseif temperature_trend == 'up' %}
+                <span class="temperature-trend up">
                     {{ '↗' }}
-                {% elseif temperature_trend == 'down' %}
+                </span>
+            {% elseif temperature_trend == 'down' %}
+                <span class="temperature-trend down">
                     {{ '↘' }}
-                {% endif %}
-            </span>
+                </span>
+            {% endif %}
         {% endif %}
     </td>
     <td>
-        <img src="assets/humidity.png" />
         {% if offline %}
             -
         {% else %}
             {{ humidity }}<span class="unit">%</span>
         {% endif %}
     </td>
-    <td class="battery">
+    <td>
         {% if battery and not offline %}
-            <span class="{{ battery > 20 ? 'green' : 'red' }}" style="width: {{ battery }}%">{{ battery }}%</span>
+            <div class="battery">
+                <span class="{{ battery > 20 ? 'green' : 'red' }}" style="height: {{ battery }}%">&nbsp;</span>
+                <span class="percentage">{{ battery }}%</span>
+            </div>
         {% endif %}
     </td>
 </tr>
