@@ -17,4 +17,4 @@ Simply configure `app/config/prod.json` by overwriting it with your Netatmo cred
 
 ```
 
-To start it locally simply run `SILEX_ENV=prod php -S 127.0.0.1:8080 -t netatmo-viewer/web/` and open the [Netatmo viewer](http://localhost:8080).
+To start it locally simply run `COMPOSER_PROCESS_TIMEOUT=0 composer serve` and open the [Netatmo viewer](http://localhost:8080).
