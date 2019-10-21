@@ -15,7 +15,7 @@
     "require": {
         "silex/silex": "~2.0",
         "netatmo/netatmo-api": "^2.0",
-        "twig/twig": "~2.0",
+        "twig/twig": "~3.x-dev",
         "lokhman/silex-tools": "^2.4"
     },
     "require-dev": {
