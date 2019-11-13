@@ -7,14 +7,14 @@
         "name": "Robert Gruber",
         "email": "robert@mir-zwoa.com"
     }],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "repositories": [{
         "type": "vcs",
         "url": "https://github.com/gruberro/Netatmo-API-PHP"
     }],
     "require": {
         "silex/silex": "~2.0",
-        "netatmo/netatmo-api": "^2.0",
+        "netatmo/netatmo-api": "^2.0@dev",
         "twig/twig": "~2.0",
         "lokhman/silex-tools": "^2.4"
     },
