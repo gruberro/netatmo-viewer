@@ -13,7 +13,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../views',
 ));
 
-$app->get('/', function() use($app) {
+$app->get('/', function () use ($app) {
     $config = [];
     $config['client_id'] = $app['client_id'];
     $config['client_secret'] = $app['client_secret'];
@@ -25,9 +25,15 @@ $app->get('/', function() use($app) {
 
     $client->getAccessToken();
 
+    if (count($app['stationNames']) === 0 && isset($app['stationName'])) {
+        $stationNames = [$app['stationName']];
+    } else {
+        $stationNames = $app['stationNames'];
+    }
+
     return $app['twig']->render('dashboard.html.twig', array(
         'data' => $client->getData(),
-        'stationName' => $app['stationName'],
+        'stationNames' => $stationNames,
     ));
 });
 
