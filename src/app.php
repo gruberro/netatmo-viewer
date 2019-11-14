@@ -31,8 +31,30 @@ $app->get('/', function () use ($app) {
         $stationNames = $app['stationNames'];
     }
 
+    $mainStations = [];
+    $modules = [];
+    foreach ($client->getData()['devices'] as $device) {
+        if (!in_array($device['station_name'], $stationNames)) {
+            continue;
+        }
+
+        $mainStations[] = $device;
+
+        foreach ($device['modules'] as $module) {
+            if (!in_array($module['type'], ['NAModule1', 'NAModule4'])) {
+                continue;
+            }
+
+            $modules[] = $module;
+        }
+    }
+
+    usort($modules, function ($a, $b) {
+        return strcmp($a['type'], $b['type']) * -1;
+    });
+
     return $app['twig']->render('dashboard.html.twig', array(
-        'data' => $client->getData(),
+        'data' => array_merge($mainStations, $modules),
         'stationNames' => $stationNames,
     ));
 });

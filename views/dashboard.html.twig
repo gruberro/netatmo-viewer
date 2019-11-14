@@ -181,12 +181,12 @@
     </head>
     <body>
         <table cellpadding="0" cellspacing="0">
-            {% for device in data.devices if device.station_name in stationNames %}
-                {% include 'entry.html.twig' with { name: device.module_name, temperature: device.dashboard_data.Temperature, temperature_trend: device.dashboard_data.temp_trend, humidity: device.dashboard_data.Humidity, co2: device.dashboard_data.CO2 } only %}
-
-                {% for module in device.modules if module.type in ['NAModule1', 'NAModule4'] %}
-                    {% include 'entry.html.twig' with { name: module.module_name, temperature: module.dashboard_data.Temperature, temperature_trend: module.dashboard_data.temp_trend, humidity: module.dashboard_data.Humidity, battery: module.battery_percent, co2: module.dashboard_data.CO2, lastSeen: module.last_seen } only %}
-                {% endfor %}
+            {% for entry in data %}
+                {% if entry.type == 'NAMain' %}
+                    {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, co2: entry.dashboard_data.CO2 } only %}
+                {% else %}
+                    {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, battery: entry.battery_percent, co2: entry.dashboard_data.CO2, lastSeen: entry.last_seen } only %}
+                {% endif %}
             {% endfor %}
         </table>
     </body>
