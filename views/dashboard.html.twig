@@ -12,14 +12,14 @@
                 --color-yellow-dark: #fb8c00;
                 --color-green: #66bb6a;
                 --color-green-dark: #43a047;
-                --color-grey-light: #f4f6f8;
+                --color-grey-light: #fbfaf1;
                 --color-grey-dark: #546e7a;
-                --color-white: #ffffff;
+                --color-white: #fffded;
             }
 
             * {
                 font-family: 'PT Sans Caption', sans-serif;
-                font-size: 10vh;
+                font-size: 6vh;
                 box-sizing: border-box;
             }
 
@@ -181,10 +181,10 @@
     </head>
     <body>
         <table cellpadding="0" cellspacing="0">
-            {% for device in data.devices if device.station_name == stationName %}
+            {% for device in data.devices if device.station_name in stationNames %}
                 {% include 'entry.html.twig' with { name: device.module_name, temperature: device.dashboard_data.Temperature, temperature_trend: device.dashboard_data.temp_trend, humidity: device.dashboard_data.Humidity, co2: device.dashboard_data.CO2 } only %}
 
-                {% for module in device.modules %}
+                {% for module in device.modules if module.type in ['NAModule1', 'NAModule4'] %}
                     {% include 'entry.html.twig' with { name: module.module_name, temperature: module.dashboard_data.Temperature, temperature_trend: module.dashboard_data.temp_trend, humidity: module.dashboard_data.Humidity, battery: module.battery_percent, co2: module.dashboard_data.CO2, lastSeen: module.last_seen } only %}
                 {% endfor %}
             {% endfor %}

@@ -3,5 +3,5 @@
     "client_secret": "",
     "username": "",
     "password": "",
-    "stationName": ""
+    "stationNames": []
 }

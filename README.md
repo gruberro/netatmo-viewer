@@ -12,7 +12,7 @@ Simply configure `app/config/prod.json` by overwriting it with your Netatmo cred
     "client_secret": "your_client_secret",
     "username": "your_username",
     "password": "your_password",
-    "stationName": "your_station_name"
+    "stationNames": ["your_station_name_1", "your_station_name_2"]
 }
 
 ```
