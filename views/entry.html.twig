@@ -1,55 +1,53 @@
 {% set offline = lastSeen and date(lastSeen) <= date('-1day') %}
 
-<tr>
-    <td>
-        {% if co2 %}
-            {% if co2 < 1000 %}
-                <span class="co2 ok" title="{{ co2 }}"></span>
-            {% elseif co2 < 2000 %}
-                <span class="co2 warning" title="{{ co2 }}"></span>
-            {% else %}
-                <span class="co2 danger" title="{{ co2 }}"></span>
-            {% endif %}
-        {% endif %}
-    </td>
-    <td>
-        <span class="{{ offline ? 'offline' : '' }}">
-            {{ name }}
-        </span>
-    </td>
-    <td>
-        {% if offline %}
-            -
-        {% else %}
-            {{ temperature|number_format(1, ',', '.') }}<span class="unit">°C</span>
-            {% if temperature_trend == 'stable' %}
-                <span class="temperature-trend stable">
-                    {{ '→' }}
-                </span>
-            {% elseif temperature_trend == 'up' %}
-                <span class="temperature-trend up">
-                    {{ '↗' }}
-                </span>
-            {% elseif temperature_trend == 'down' %}
-                <span class="temperature-trend down">
-                    {{ '↘' }}
-                </span>
-            {% endif %}
-        {% endif %}
-    </td>
-    <td>
-        {% if offline %}
-            -
-        {% else %}
-            {{ humidity }}<span class="unit">%</span>
-        {% endif %}
-    </td>
-    <td>
-        {% if battery and not offline %}
-            <div class="battery">
-                <span class="{{ battery > 20 ? 'green' : 'red' }}" style="height: {{ battery }}%">&nbsp;</span>
-                <span class="percentage">{{ battery }}%</span>
+{% set co2_severity = 'ok' %}
+{% if co2 %}
+    {% if co2 < 1000 %}
+        {% set co2_severity = 'ok' %}
+    {% elseif co2 < 2000 %}
+        {% set co2_severity = 'warning' %}
+    {% else %}
+        {% set co2_severity = 'danger' %}
+    {% endif %}
+{% endif %}
+
+<div class="dashboard-item-container">
+    <div class="dashboard-item dashboard-item__co2--{{ co2_severity }} {{ offline ? 'dashboard-item--offline' }}">
+        <div class="temperature">
+            <div class="temperature__degrees">{{ temperature|number_format(1, ',', '.') }}</div>
+            <div class="temparature__appendix">
+                <span class="temperature__unit">°C</span>
+                {% if temperature_trend == 'stable' %}
+                    <span class="temperature__trend temperature__trend--stable">
+                        {{ '→' }}
+                    </span>
+                {% elseif temperature_trend == 'up' %}
+                    <span class="temperature__trend temperature__trend--up">
+                        {{ '↗' }}
+                    </span>
+                {% elseif temperature_trend == 'down' %}
+                    <span class="temperature__trend temperature__trend--down">
+                        {{ '↘' }}
+                    </span>
+                {% endif %}
             </div>
-        {% endif %}
-    </td>
-</tr>
+        </div>
+        <div class="dashboard-item__footer">
+            <div class="station-name">
+                {{ name }}
+            </div>
+            <div class="dashboard-item__appendix">
+                <div class="humidity">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 328.611 328.611"><path d="M209.306 50.798a7.5 7.5 0 00-12.088 8.883c54.576 74.266 66.032 123.541 66.032 151.8 0 27.691-8.272 52.794-23.293 70.685-17.519 20.866-42.972 31.446-75.651 31.446-73.031 0-98.944-55.018-98.944-102.131 0-52.227 28.103-103.234 51.679-136.829 25.858-36.847 52.11-61.415 52.37-61.657a7.5 7.5 0 00-10.209-10.99c-1.11 1.031-27.497 25.698-54.254 63.765-24.901 35.428-54.586 89.465-54.586 145.71 0 31.062 9.673 59.599 27.236 80.353 20.361 24.061 50.345 36.779 86.708 36.779 36.794 0 66.926-12.726 87.139-36.801 17.286-20.588 26.806-49.117 26.806-80.33-.001-55.265-37.493-117.884-68.945-160.683z"/><path d="M198.43 148.146l-95.162 95.162a7.5 7.5 0 005.304 12.803 7.478 7.478 0 005.304-2.197l95.162-95.162a7.5 7.5 0 000-10.606 7.502 7.502 0 00-10.608 0zM191.965 207.899c-13.292 0-24.106 10.814-24.106 24.106s10.814 24.106 24.106 24.106 24.106-10.814 24.106-24.106-10.814-24.106-24.106-24.106zm0 33.212c-5.021 0-9.106-4.085-9.106-9.106s4.085-9.106 9.106-9.106 9.106 4.085 9.106 9.106-4.085 9.106-9.106 9.106zM125.178 194.162c13.292 0 24.106-10.814 24.106-24.106s-10.814-24.106-24.106-24.106-24.106 10.814-24.106 24.106 10.814 24.106 24.106 24.106zm0-33.213c5.021 0 9.106 4.085 9.106 9.106s-4.085 9.106-9.106 9.106-9.106-4.085-9.106-9.106 4.084-9.106 9.106-9.106z"/></svg>
+                    {{ humidity }}<span class="humidity__unit">%</span>
+                </div>
+                {% if battery %}
+                    <div class="battery">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.75 420.75"><path d="M238.059 127.334l-87.01 111.728h55.157l-23.515 83.042 87.01-111.729h-55.157z"/><path d="M258.188 0h-95.625c-10.566 0-19.125 8.559-19.125 19.125V38.25h-38.25C89.371 38.25 76.5 51.121 76.5 66.938v325.125c0 15.816 12.871 28.688 28.688 28.688h210.375c15.816 0 28.688-12.871 28.688-28.688V66.938c0-15.816-12.871-28.688-28.688-28.688h-38.25V19.125C277.312 8.559 268.754 0 258.188 0zm57.374 57.375c5.278 0 9.562 4.284 9.562 9.562v325.125c0 5.278-4.284 9.562-9.562 9.562H105.188c-5.278 0-9.562-4.284-9.562-9.562V66.938c0-5.278 4.284-9.562 9.562-9.562h210.374z"/></svg>
+                        {{ battery }}<span class="battery__unit">%</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
