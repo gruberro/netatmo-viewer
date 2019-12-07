@@ -2,177 +2,173 @@
     <title>Netatmo dashboard</title>
     <head>
         <style type="text/css">
-            @import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption');
-            @import url('https://fonts.googleapis.com/css?family=Exo:200&display=swap');
+            @import url('https://fonts.googleapis.com/css?family=Kadwa:700&display=swap');
 
             :root {
                 --color-red: #ef5350;
+                --color-red-translucent: rgba(239, 83, 80, .85);
                 --color-red-dark: #e53935;
+                --color-red-dark-translucent: rgba(229, 57, 53, .85);
                 --color-yellow: #ffa726;
+                --color-yellow-translucent: rgba(255, 167, 38, .85);
                 --color-yellow-dark: #fb8c00;
+                --color-yellow-dark-translucent: rgba(251, 140, 0, .85);
                 --color-green: #66bb6a;
-                --color-green-dark: #43a047;
-                --color-grey-light: #fbfaf1;
-                --color-grey-dark: #546e7a;
+                --color-green-translucent: rgba(102, 187, 106, .85);
+                --color-green-dark: #397D02;
+                --color-green-dark-translucent: rgba(67, 160, 71, .85);
+                --color-grey: #d3d3d3;
+                --color-grey-translucent: rgba(211, 211, 211, .85);
+                --color-grey-dark: #696969;
+                --color-grey-dark-translucent: rgba(105, 105, 105, .85);
                 --color-white: #fffded;
+                --color-black: #2d2d2d;
+                --color-black-translucent: rgba(0, 0, 0, .14);
             }
 
             * {
-                font-family: 'PT Sans Caption', sans-serif;
-                font-size: 6vh;
+                font-family: 'Kadwa', serif;
+                font-size: 5vh;
                 box-sizing: border-box;
             }
 
             html,
             body {
-                padding: 10px;
+                padding: 0;
                 margin: 0;
-                background-color: var(--color-grey-light);
-            }
-
-            table {
-                max-height: calc(100vh - 20px);
                 height: 100%;
-                width: 100%;
-                display: table;
-                border-spacing: 0;
-                border-collapse: collapse;
-                box-shadow: 0 0 0 3px rgba(63, 63, 68, .05), 0 1px 3px 0 rgba(63, 63, 68, .15);
-                border-radius: 4px;
-                background-color: var(--color-white);
             }
 
-            tr {
-                vertical-align: middle;
+            svg {
+                height: .5rem;
+                fill: var(--color-black);
             }
 
-            tr:hover {
-                background-color: rgba(0, 0, 0, .07);
-            }
-
-            tr td:first-child {
-                width: 1.5rem;
-                text-align: center;
-            }
-
-            tr td:nth-child(2),
-            tr td:nth-child(3) {
-                font-weight: bold;
-            }
-
-            td {
-                padding: 10px;
-                border-bottom: 3px solid var(--color-grey-light);
-            }
-
-            tr:last-child td {
-                border-bottom: 0;
-            }
-
-            td img {
-                height: 0.6rem;
-                opacity: 0.3;
-            }
-
-            .battery,
-            .battery span {
+            .dashboard {
                 display: flex;
-                width: 15px;
-                font-size: 12px;
-                line-height: 12px;
-                align-items: flex-end;
-            }
-
-            .battery {
-                background-color: var(--color-grey-light);
-                position: relative;
+                flex-wrap: wrap;
+                flex-direction: row;
+                align-items: center;
+                padding: 5px;
                 height: 100%;
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(63, 63, 68, .4);
             }
 
-            .battery .percentage {
-                font-family: 'Exo', sans-serif;
-                font-weight: 100;
-                letter-spacing: 2;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                opacity: 1;
-                transform: rotate(-90deg);
+            .dashboard-item-container {
+                text-align: center;
+                padding: 5px;
+                height: {{ 100 / (data|length / columns)|round(0, 'ceil') }}%;
+                flex-basis: {{ (data|length >= columns) ? (100 / columns) : (100 / data|length) }}%;
             }
 
-            .battery span {
-                padding-left: 5px;
-                opacity: 0.8;
+            .dashboard-item {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                color: var(--color-black);
+                padding: 0 10px;
             }
 
-            .battery span.green {
-                background: linear-gradient(60deg, var(--color-green), var(--color-green-dark));
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(76, 175, 80, .4);
+            .dashboard-item--offline {
+                background: linear-gradient(60deg, var(--color-grey-translucent), var(--color-grey-dark-translucent)) !important;
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-grey-dark-translucent) !important;
+                text-decoration: line-through !important;
             }
 
-            .battery span.red {
-                background: linear-gradient(60deg, var(--color-red), var(--color-red-dark));
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
+            .dashboard-item__co2--ok {
+                background: linear-gradient(60deg, var(--color-green-translucent), var(--color-green-dark-translucent));
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-green-dark-translucent);
             }
 
-            .temperature-trend {
-                color: var(--color-grey-dark);
-                font-size: .8rem;
-                font-weight: 100;
+            .dashboard-item__co2--warning {
+                background: linear-gradient(60deg, var(--color-yellow-translucent), var(--color-yellow-dark-translucent));
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-yellow-dark-translucent);
             }
 
-            .temperature-trend.up {
-                color: var(--color-green);
-            }
-
-            .temperature-trend.down {
-                color: var(--color-red);
-            }
-
-            .unit {
-                font-size: .5rem;
-                color: var(--color-grey-dark);
-                font-weight: 100;
-            }
-
-            .co2 {
-                display: inline-block;
-                width: 1.2rem;
-                height: 1.2rem;
-                border-radius: 50%;
-            }
-
-            .co2.ok {
-                background: linear-gradient(60deg, var(--color-green), var(--color-green-dark));
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(76, 175, 80, .4);
-            }
-
-            .co2.warning {
-                background: linear-gradient(60deg, var(--color-yellow), var(--color-yellow-dark));
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(255, 152, 0, .4);
-            }
-
-            .co2.danger {
-                background: linear-gradient(60deg, var(--color-red), var(--color-red-dark));
-                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
+            .dashboard-item__co2--danger {
+                background: linear-gradient(60deg, var(--color-red-translucent), var(--color-red-dark-translucent));
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-red-dark-translucent);
                 animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
             }
 
-            .offline {
-                text-decoration: line-through;
-                color: #666;
+            .dashboard-item__footer {
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .dashboard-item__appendix {
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+            }
+
+            .temperature {
+                display: flex;
+                height: 100%;
+                align-items: center;
+                flex-direction: row;
+            }
+
+            .temperature__degrees {
+                font-size: {{ 100 / columns|round(0, 'floor') * 0.3 }}vw;
+            }
+
+            .temparature__appendix {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .temperature__trend {
+                color: var(--color-black);
+                font-size: .9rem;
+                font-weight: 100;
+                text-shadow: 1px 0 var(--color-grey-dark);
+            }
+
+            .temperature__trend--stable {
+                text-shadow: none;
+            }
+
+            .temperature__trend--up {
+                color: var(--color-green-dark);
+            }
+
+            .temperature__trend--down {
+                color: var(--color-red-dark);
+            }
+
+            .battery__unit,
+            .humidity__unit,
+            .temperature__unit {
+                font-size: .7rem;
+                font-weight: 100;
+                margin-right: 10px;
+            }
+
+            .station-name {
+                font-weight: bold;
+            }
+
+            .battery,
+            .humidity {
+                display: flex;
+                align-items: center;
             }
 
             @keyframes pulse-dot {
                 0% {
-                    transform: scale(.9);
+                    transform: scale(.99);
                 }
                 50% {
                     transform: scale(1);
                 }
                 100% {
-                    transform: scale(.9);
+                    transform: scale(.99);
                 }
             }
         </style>
@@ -180,14 +176,10 @@
         <meta http-equiv="refresh" content="120">
     </head>
     <body>
-        <table cellpadding="0" cellspacing="0">
+        <div class="dashboard">
             {% for entry in data %}
-                {% if entry.type == 'NAMain' %}
-                    {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, co2: entry.dashboard_data.CO2 } only %}
-                {% else %}
-                    {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, battery: entry.battery_percent, co2: entry.dashboard_data.CO2, lastSeen: entry.last_seen } only %}
-                {% endif %}
+                {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, co2: entry.dashboard_data.CO2, battery: entry.battery_percent, lastSeen: entry.last_seen } only %}
             {% endfor %}
-        </table>
+        </div>
     </body>
 </html>

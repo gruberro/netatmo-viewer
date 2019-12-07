@@ -56,6 +56,7 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('dashboard.html.twig', array(
         'data' => array_merge($mainStations, $modules),
         'stationNames' => $stationNames,
+        'columns' => $app['columns'],
     ));
 });
 
