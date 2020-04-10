@@ -1,4 +1,4 @@
-{% set offline = lastSeen and date(lastSeen) <= date('-1day') %}
+{% set offline = lastSeen and date(lastSeen) <= date('-1hour') %}
 
 {% set co2_severity = 'ok' %}
 {% if co2 %}
