@@ -41,7 +41,7 @@ $app->get('/', function () use ($app) {
         $mainStations[] = $device;
 
         foreach ($device['modules'] as $module) {
-            if (!in_array($module['type'], ['NAModule1', 'NAModule4'])) {
+            if (!in_array($module['type'], ['NAModule1', 'NAModule3', 'NAModule4'])) {
                 continue;
             }
 
@@ -51,6 +51,10 @@ $app->get('/', function () use ($app) {
 
     usort($modules, function ($a, $b) {
         return strcmp($a['type'], $b['type']) * -1;
+    });
+
+    usort($mainStations, function ($a, $b) {
+        return strcmp($a['station_name'], $b['station_name']);
     });
 
     return $app['twig']->render('dashboard.html.twig', array(

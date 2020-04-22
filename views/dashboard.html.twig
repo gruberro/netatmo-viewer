@@ -24,6 +24,14 @@
                 --color-white: #fffded;
                 --color-black: #2d2d2d;
                 --color-black-translucent: rgba(0, 0, 0, .14);
+                --color-light-blue: #BEE3F8;
+                --color-light-blue-translucent: rgba(190, 227, 248, .85);
+                --color-light-blue-dark: #90CDF4;
+                --color-light-blue-dark-translucent: rgba(144, 205, 244, .85);
+                --color-heavy-blue: #2B6CB0;
+                --color-heavy-blue-translucent: rgba(43, 108, 176, .85);
+                --color-heavy-blue-dark: #2A4365;
+                --color-heavy-blue-dark-translucent: rgba(42, 67, 101, .85);
             }
 
             * {
@@ -92,6 +100,17 @@
                 animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
             }
 
+            .dashboard-item__rain {
+                background: linear-gradient(60deg, var(--color-light-blue-translucent), var(--color-light-blue-dark-translucent));
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-light-blue-dark-translucent);
+            }
+
+            .dashboard-item__rain--raining {
+                background: linear-gradient(60deg, var(--color-heavy-blue-translucent), var(--color-heavy-blue-dark-translucent));
+                box-shadow: 0 4px 20px 0 var(--color-black-translucent), 0 7px 10px -5px var(--color-heavy-blue-dark-translucent);
+                animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
+            }
+
             .dashboard-item__footer {
                 display: flex;
                 align-items: center;
@@ -142,9 +161,27 @@
                 color: var(--color-red-dark);
             }
 
+            .rain {
+                display: flex;
+                height: 100%;
+                align-items: center;
+                flex-direction: row;
+            }
+
+            .rain__mm-per-hour {
+                font-size: {{ 100 / columns|round(0, 'floor') * 0.3 }}vw;
+            }
+
+            .rain__appendix {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
             .battery__unit,
             .humidity__unit,
-            .temperature__unit {
+            .temperature__unit,
+            .rain__unit {
                 font-size: .7rem;
                 font-weight: 100;
                 margin-right: 10px;
@@ -178,7 +215,11 @@
     <body>
         <div class="dashboard">
             {% for entry in data %}
-                {% include 'entry.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, co2: entry.dashboard_data.CO2, battery: entry.battery_percent, lastSeen: entry.last_seen } only %}
+                {% if entry.type == 'NAModule3' %}
+                    {% include 'rain-module.html.twig' with { name: entry.module_name, rain_24: entry.dashboard_data.sum_rain_24, is_raining: entry.dashboard_data.Rain, battery: entry.battery_percent, lastSeen: entry.last_seen } only %}
+                {% else %}
+                    {% include 'default-module.html.twig' with { name: entry.module_name, temperature: entry.dashboard_data.Temperature, temperature_trend: entry.dashboard_data.temp_trend, humidity: entry.dashboard_data.Humidity, co2: entry.dashboard_data.CO2, battery: entry.battery_percent, lastSeen: entry.last_seen } only %}
+                {% endif %}
             {% endfor %}
         </div>
     </body>
