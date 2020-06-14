@@ -3,9 +3,9 @@
 <div class="dashboard-item-container">
     <div class="dashboard-item dashboard-item__rain {{ is_raining ? 'dashboard-item__rain--raining'}} {{ offline ? 'dashboard-item--offline' }}">
         <div class="rain">
-            <div class="rain__mm-per-hour">{{ rain_24 }}</div>
+            <div class="rain__mm-per-hour">{{ rain_24|number_format(1, ',', '.') }}</div>
             <div class="rain__appendix">
-                <span class="rain__unit">mm/24h</span>
+                <span class="rain__unit">mm/&#8203;24h</span>
             </div>
         </div>
         <div class="dashboard-item__footer">
