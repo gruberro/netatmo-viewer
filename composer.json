@@ -16,7 +16,7 @@
         "silex/silex": "~2.0",
         "netatmo/netatmo-api": "^2.0@dev",
         "twig/twig": "~2.0",
-        "lokhman/silex-tools": "^2.4"
+        "lokhman/silex-tools": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.0",
@@ -26,5 +26,14 @@
     "scripts": {
         "tests": "phpunit",
         "serve": "SILEX_ENV=prod php -S 127.0.0.1:8080 -t web"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.9"
+        },
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
     }
 }
